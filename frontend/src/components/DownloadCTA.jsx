@@ -4,25 +4,26 @@ import { Download, Smartphone, CheckCircle } from 'lucide-react';
 export default function DownloadCTA() {
   const [downloading, setDownloading] = useState(false);
 
+  // Hardcoded for user's decdsc7rn Cloudinary setup
+  const CLOUD_NAME = 'decdsc7rn';
+  const APK_PUBLIC_ID = 'sharent-latest-apk';
+
   const handleDownload = async (e) => {
     e.preventDefault();
     setDownloading(true);
     
+    // Construct Cloudinary secure URL for raw files (attachment forces download)
+    const cloudinaryUrl = `https://res.cloudinary.com/${CLOUD_NAME}/raw/upload/fl_attachment/${APK_PUBLIC_ID}.apk`;
+
     try {
-      // In production, point to the actual backend URL, hardcoding localhost for dev testing
-      const response = await fetch('http://localhost:3001/api/download/apk');
-      if (!response.ok) throw new Error('Download not available yet');
-      
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      // Create an invisible anchor to trigger direct browser download
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'sharent-latest.apk';
+      a.href = cloudinaryUrl;
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
     } catch (err) {
-      alert('APK currently unavailable or server is down. Admin needs to upload one first!');
+      alert('APK currently unavailable or an error occurred downloading from Cloud.');
     } finally {
       setDownloading(false);
     }
@@ -45,7 +46,7 @@ export default function DownloadCTA() {
               className="btn" 
               style={{ padding: '16px 32px', fontSize: '1.1rem', background: 'white', color: 'var(--accent-primary)', border: 'none', fontWeight: 600, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
             >
-              {downloading ? 'Downloading...' : 'Direct APK Download'}
+              {downloading ? 'Connecting...' : 'Direct APK Download'}
               {!downloading && <Download size={20} style={{ marginLeft: '12px' }} />}
             </button>
             <button 

@@ -8,6 +8,10 @@ export default function Admin() {
   const [status, setStatus] = useState({ type: '', message: '' });
   const [uploading, setUploading] = useState(false);
 
+  // Allow Vercel environment variables to set the backend URL, fallback to localhost
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001'; 
+  const CLOUD_NAME = 'decdsc7rn'; // Hardcoded as provided by user
+
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!email) return setStatus({ type: 'error', message: 'Admin login email required' });
@@ -18,28 +22,42 @@ export default function Admin() {
     setUploading(true);
     setStatus({ type: '', message: '' });
 
-    const formData = new FormData();
-    formData.append('apk', file);
-
     try {
-      // Assuming backend is running on localhost:3001 in dev
-      const response = await fetch('http://localhost:3001/api/admin/upload-apk', {
+      // 1. Ask our backend for permission to upload directly to Cloudinary
+      const sigResponse = await fetch(`${BACKEND_URL}/api/admin/cloudinary-signature`, {
         method: 'POST',
         headers: {
           'x-admin-email': email,
           'x-admin-password': password,
-        },
+        }
+      });
+
+      const sigData = await sigResponse.json();
+      if (!sigResponse.ok || !sigData.success) {
+        throw new Error(sigData.message || 'Failed to authenticate admin.');
+      }
+
+      // 2. We have the signature. Now upload DIRECTLY to Cloudinary bypassing Vercel limits.
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('api_key', sigData.api_key);
+      formData.append('timestamp', sigData.timestamp);
+      formData.append('signature', sigData.signature);
+      formData.append('public_id', sigData.public_id);
+      
+      const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`, {
+        method: 'POST',
         body: formData,
       });
 
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
-        setStatus({ type: 'success', message: 'Success! New APK is now live.' });
+      const uploadResult = await uploadResponse.json();
+
+      if (uploadResponse.ok) {
+        setStatus({ type: 'success', message: 'Success! New APK is live on global CDN.' });
         setFile(null);
         setPassword('');
       } else {
-        throw new Error(data.message || 'Upload failed');
+        throw new Error(uploadResult.error?.message || 'Cloudinary upload failed');
       }
     } catch (err) {
       setStatus({ type: 'error', message: err.message });
@@ -147,7 +165,7 @@ export default function Admin() {
               disabled={uploading}
               style={{ width: '100%', padding: '14px', marginTop: '10px' }}
             >
-              {uploading ? 'Uploading...' : 'Publish Update'}
+              {uploading ? 'Upload to Cloudinary' : 'Publish Update'}
             </button>
           </form>
 
