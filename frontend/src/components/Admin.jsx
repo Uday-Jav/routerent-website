@@ -9,7 +9,7 @@ export default function Admin() {
   const [uploading, setUploading] = useState(false);
 
   // Allow Vercel environment variables to set the backend URL, fallback to localhost
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001'; 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || 'http://localhost:3001'; 
   const CLOUD_NAME = 'decdsc7rn'; // Hardcoded as provided by user
 
   const handleUpload = async (e) => {
@@ -24,7 +24,9 @@ export default function Admin() {
 
     try {
       // 1. Ask our backend for permission to upload directly to Cloudinary
-      const sigResponse = await fetch(`${BACKEND_URL}/api/admin/cloudinary-signature`, {
+      const sigUrl = `${BACKEND_URL}/api/admin/cloudinary-signature`;
+      
+      const sigResponse = await fetch(sigUrl, {
         method: 'POST',
         headers: {
           'x-admin-email': email,
@@ -32,8 +34,21 @@ export default function Admin() {
         }
       });
 
-      const sigData = await sigResponse.json();
-      if (!sigResponse.ok || !sigData.success) {
+      // Let's grab the raw text first to avoid the "Unexpected end of JSON input" crash
+      const rawText = await sigResponse.text();
+      
+      if (!sigResponse.ok) {
+        throw new Error(`Backend Error (${sigResponse.status}): ${rawText || 'Empty Response from Vercel'}`);
+      }
+
+      let sigData;
+      try {
+         sigData = JSON.parse(rawText);
+      } catch (e) {
+         throw new Error(`Invalid JSON received from backend API: ${rawText}`);
+      }
+      
+      if (!sigData.success) {
         throw new Error(sigData.message || 'Failed to authenticate admin.');
       }
 
@@ -60,6 +75,7 @@ export default function Admin() {
         throw new Error(uploadResult.error?.message || 'Cloudinary upload failed');
       }
     } catch (err) {
+      console.error(err);
       setStatus({ type: 'error', message: err.message });
     } finally {
       setUploading(false);
@@ -89,8 +105,8 @@ export default function Admin() {
               color: status.type === 'error' ? '#ef4444' : '#22c55e',
               border: `1px solid ${status.type === 'error' ? '#ef4444' : '#22c55e'}`
             }}>
-              {status.type === 'error' ? <AlertCircle size={20} /> : <CheckCircle2 size={20} />}
-              {status.message}
+              {status.type === 'error' ? <AlertCircle size={20} style={{minWidth: '20px'}} /> : <CheckCircle2 size={20} style={{minWidth: '20px'}} />}
+              <span style={{ fontSize: '0.85rem', wordBreak: 'break-word' }}>{status.message}</span>
             </div>
           )}
 
