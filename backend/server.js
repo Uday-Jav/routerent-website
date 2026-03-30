@@ -9,8 +9,9 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-const CLOUDINARY_API_SECRET = 'wbwdZsteOZ7IDuK9ExXAgSzTXuE';
-const CLOUDINARY_API_KEY = '362756543927552';
+// Use environment variables for production security
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
 // Cloud Name is decdsc7rn
 
 // Get Cloudinary Signature for Direct Upload
