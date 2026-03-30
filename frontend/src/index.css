@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Light Mode Colors - Soft Neutral + Teal */
+  --bg-color: #f8fafc;        /* Very Soft Gray */
+  --text-color: #1e293b;      /* Navy Gray */
+  --text-muted: #64748b;
+  --accent-primary: #0f766e;  /* Deep Teal */
+  --accent-secondary: #0ea5e9; /* Sky Blue for subtle contrast */
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --border-color: rgba(15, 23, 42, 0.05);
+
+  /* Clean solid primary */
+  --primary-solid: var(--accent-primary);
+  
+  /* Linear-style Soft Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+  --shadow-card: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.dark {
+  /* Dark Mode Colors - Deep Navy */
+  --bg-color: #0b1120;        /* Deep Navy */
+  --text-color: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-primary: #14b8a6;  /* Soft Cyan */
+  --accent-secondary: #38bdf8;
+  --card-bg: rgba(30, 41, 59, 0.6);
+  --border-color: rgba(255, 255, 255, 0.05);
+  
+  /* Solid primary for buttons */
+  --primary-solid: var(--accent-primary);
+  
+  /* Darker shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+  --shadow-card: inset 0 1px 0 0 rgba(255, 255, 255, 0.02), 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography styles */
+h1, h2, h3, h4 {
+  font-weight: 600; /* Adjusted from 700 to 600 for a calmer aesthetic */
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+p {
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.text-gradient {
+  color: var(--accent-primary); /* Fallback completely to the solid brand color, removing harsh gradient */
+  font-weight: 600;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px; /* Slightly slimmer padding for Apple/Linear feel */
+  border-radius: 8px; /* Square/rounded instead of pill for a more mature look */
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent; /* Linear border style */
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--text-color);
+  color: var(--bg-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:active {
+  transform: scale(0.97); /* Sponge button press */
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-color);
+}
+
+/* 
+  Sponge Press Interaction 
+  This creates a dark, blurred inset 3D illusion directly behind the DOM content
+  centered beneath the cursor. When cursor leaves, opacity goes to 0 (regains state).
+*/
+.interactive-sponge-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0; /* Behind everything */
+  pointer-events: none;
+  background-color: transparent;
+}
+
+/* We use the base color as the main wrapper bg to ensure shadows blend naturally */
+.interactive-sponge-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Creates the "indentation"/memory foam shadow dynamically */
+  background: radial-gradient(400px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), 
+              rgba(0, 0, 0, 0.04) 0%, 
+              rgba(0, 0, 0, 0) 100%);
+  transition: opacity 0.6s cubic-bezier(0.2, 0, 0, 1);
+  will-change: background;
+  opacity: var(--sponge-opacity, 0); 
+}
+
+.dark .interactive-sponge-layer {
+  /* In dark mode we use a stronger black shadow to simulate depth */
+  background: radial-gradient(400px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), 
+              rgba(0, 0, 0, 0.6) 0%, 
+              rgba(0, 0, 0, 0) 100%);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Glass card styling - Calmer Linear Style */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px; /* Less rounded for maturity */
+  padding: 32px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+/* We removed the hover lift to make it feel more solid, 
+   or we just do a very subtle border/shadow shift */
+.glass-card:hover {
+  border-color: rgba(15, 118, 110, 0.2); /* Soft teal hint on hover */
+  box-shadow: var(--shadow-md);
+}
+.dark .glass-card:hover {
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+/* Utils */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 32px; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.text-center { text-align: center; }
