@@ -1,51 +1,73 @@
 import React from 'react';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function Screenshots() {
-  const screenshots = [
-    { src: '/screenshot1.png', label: 'Home & Explore' },
-    { src: '/screenshot2.png', label: 'Route Search' },
-    { src: '/screenshot3.png', label: 'Offer Ride' }
+  const { ref, isVisible } = useScrollReveal();
+
+  const screens = [
+    { src: '/home_page.png', alt: 'Home Feed' },
+    { src: '/product_page.png', alt: 'Rental Details' },
+    { src: '/ride_share_page.png', alt: 'Ride Sharing Route' },
+    { src: '/Listing_page.png', alt: 'List Your Item' }
   ];
 
   return (
-    <section className="section bg-opacity-50" style={{ background: 'var(--card-bg)' }}>
-      <div className="container">
-        <div className="text-center" style={{ marginBottom: '80px' }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>Clean Mobile UI</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem' }}>Designed for a frictionless, premium experience.</p>
+    <section id="showcase" className="section" ref={ref} style={{ background: '#000', position: 'relative', overflow: 'hidden' }}>
+      
+      {/* Immersive cinematic background */}
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        background: 'radial-gradient(circle at 50% 100%, rgba(20,184,166,0.15) 0%, transparent 60%)',
+        pointerEvents: 'none'
+      }} />
+
+      <div className="container" style={{ position: 'relative', zIndex: 10 }}>
+        
+        <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+          <h2 className={`hero-title scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#fff' }}>
+            Experience <span style={{ color: 'var(--accent-color)' }}>Routerent.</span>
+          </h2>
+          <p className={`hero-subtitle scroll-reveal delay-1 ${isVisible ? 'visible' : ''}`} style={{ color: 'rgba(255,255,255,0.7)' }}>
+            A fluid, spatial UI designed for effortless navigation and instant utility.
+          </p>
         </div>
 
-        <div className="flex justify-center flex-wrap gap-8" style={{ perspective: '1000px' }}>
-          {screenshots.map((shot, i) => (
-            <div 
-              key={i}
-              className="glass-card flex items-center justify-center animate-on-scroll" 
-              style={{ width: '300px', padding: 0, overflow: 'hidden', border: '1px solid var(--border-color)', transformStyle: 'preserve-3d' }}
-            >
+        <div className={`scroll-reveal delay-2 ${isVisible ? 'visible' : ''}`} style={{
+          display: 'flex',
+          gap: '2rem',
+          overflowX: 'auto',
+          paddingBottom: '2rem',
+          snapType: 'x mandatory',
+          scrollbarWidth: 'none', // Firefox
+          justifyContent: 'center'
+        }}>
+          {screens.map((screen, idx) => (
+            <div key={idx} style={{
+              flex: '0 0 auto',
+              width: '280px',
+              height: '600px',
+              borderRadius: '2.5rem',
+              overflow: 'hidden',
+              scrollSnapAlign: 'center',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+              border: '6px solid #111',
+              position: 'relative'
+            }}>
               <img 
-                src={shot.src} 
-                alt={shot.label}
-                style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '16px' }}
+                src={screen.src} 
+                alt={screen.alt} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 onError={(e) => {
                   e.target.style.display = 'none';
-                  e.target.nextElementSibling.style.display = 'flex';
+                  e.target.parentElement.style.background = '#1e293b';
+                  e.target.parentElement.innerHTML += `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.9rem;">${screen.alt}</div>`;
                 }}
               />
-              <div 
-                style={{ 
-                  display: 'none', height: '600px', width: '100%', 
-                  alignItems: 'center', justifyContent: 'center', 
-                  backgroundColor: 'var(--bg-color)', 
-                  color: 'var(--text-muted)',
-                  flexDirection: 'column', gap: '12px', textAlign: 'center'
-                }}
-              >
-                <span>{shot.label}</span>
-                <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>(Add <b>{shot.src}</b> to public folder)</span>
-              </div>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );

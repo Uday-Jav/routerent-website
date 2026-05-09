@@ -1,226 +1,271 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 :root {
-  /* Light Mode Colors - Soft Neutral + Teal */
-  --bg-color: #f8fafc;        /* Very Soft Gray */
-  --text-color: #1e293b;      /* Navy Gray */
+  /* Light Mode Colors */
+  --bg-color: #f8fafc;
+  --text-heading: #0f172a;
+  --text-color: #475569;
   --text-muted: #64748b;
-  --accent-primary: #0f766e;  /* Deep Teal */
-  --accent-secondary: #0ea5e9; /* Sky Blue for subtle contrast */
-  --card-bg: rgba(255, 255, 255, 0.95);
-  --border-color: rgba(15, 23, 42, 0.05);
-
-  /* Clean solid primary */
-  --primary-solid: var(--accent-primary);
-  
-  /* Linear-style Soft Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-  --shadow-card: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 14px rgba(0, 0, 0, 0.04);
+  --accent-color: #14b8a6;
+  --accent-gradient: linear-gradient(90deg, #14b8a6, #22d3ee);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --shadow-subtle: 0 10px 40px rgba(0, 0, 0, 0.05);
 }
 
-.dark {
-  /* Dark Mode Colors - Deep Navy */
-  --bg-color: #0b1120;        /* Deep Navy */
-  --text-color: #f8fafc;
+[data-theme="dark"] {
+  /* Dark Mode Colors */
+  --bg-color: #060816;
+  --text-heading: #ffffff;
+  --text-color: #cbd5e1;
   --text-muted: #94a3b8;
-  --accent-primary: #14b8a6;  /* Soft Cyan */
-  --accent-secondary: #38bdf8;
-  --card-bg: rgba(30, 41, 59, 0.6);
-  --border-color: rgba(255, 255, 255, 0.05);
-  
-  /* Solid primary for buttons */
-  --primary-solid: var(--accent-primary);
-  
-  /* Darker shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
-  --shadow-card: inset 0 1px 0 0 rgba(255, 255, 255, 0.02), 0 4px 20px rgba(0, 0, 0, 0.3);
+  --accent-color: #14b8a6;
+  --accent-gradient: linear-gradient(90deg, #14b8a6, #38bdf8);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --shadow-subtle: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.4s ease, color 0.4s ease;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Typography styles */
-h1, h2, h3, h4 {
-  font-weight: 600; /* Adjusted from 700 to 600 for a calmer aesthetic */
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-
-p {
+  transition: background-color 0.3s ease, color 0.3s ease;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Optional grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 a {
-  color: inherit;
   text-decoration: none;
+  color: inherit;
 }
 
+/* Background Glow */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(20,184,166,0.05), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(56,189,248,0.05), transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+  transition: background 0.3s ease;
+}
+
+[data-theme="dark"] .bg-glow {
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(20,184,166,0.1), transparent 40%),
+    radial-gradient(circle at 70% 40%, rgba(56,189,248,0.08), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(16,185,129,0.05), transparent 50%);
+}
+
+/* Core Utilities */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 2rem;
+  width: 100%;
 }
 
 .section {
-  padding: 120px 0;
+  padding: 8rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
-  z-index: 10;
 }
 
-.text-gradient {
-  color: var(--accent-primary); /* Fallback completely to the solid brand color, removing harsh gradient */
-  font-weight: 600;
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
 }
 
+@media (min-width: 992px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+.perspective-container {
+  perspective: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-subtle);
+  border-radius: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.glass:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"] .glass:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Typography Hierarchy */
+.hero-title {
+  color: var(--text-heading);
+  font-size: clamp(3.5rem, 7vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+}
+
+.hero-title .gradient-text {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-color);
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 3rem auto;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 24px; /* Slightly slimmer padding for Apple/Linear feel */
-  border-radius: 8px; /* Square/rounded instead of pill for a more mature look */
-  font-weight: 500;
-  font-size: 0.95rem;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent; /* Linear border style */
-  outline: none;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-primary {
-  background: var(--text-color);
-  color: var(--bg-color);
-  box-shadow: var(--shadow-sm);
+.btn:active {
+  transform: scale(0.96);
 }
 
-.btn-primary:active {
-  transform: scale(0.97); /* Sponge button press */
+.primary-btn {
+  background-color: var(--accent-color);
+  background: var(--accent-gradient);
+  color: #060816;
+  box-shadow: 0 8px 30px rgba(20, 184, 166, 0.4);
 }
 
-.btn-primary:hover {
-  opacity: 0.9;
+.primary-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(20, 184, 166, 0.6);
 }
 
-.btn-secondary {
-  background: var(--card-bg);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
+.secondary-btn {
+  background: var(--glass-bg);
+  color: var(--text-heading);
+  border: 1px solid var(--glass-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-sm);
 }
 
-.btn-secondary:active {
-  transform: scale(0.97);
-}
-
-.btn-secondary:hover {
-  background: var(--bg-color);
-}
-
-/* 
-  Sponge Press Interaction 
-  This creates a dark, blurred inset 3D illusion directly behind the DOM content
-  centered beneath the cursor. When cursor leaves, opacity goes to 0 (regains state).
-*/
-.interactive-sponge-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0; /* Behind everything */
-  pointer-events: none;
-  background-color: transparent;
-}
-
-/* We use the base color as the main wrapper bg to ensure shadows blend naturally */
-.interactive-sponge-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* Creates the "indentation"/memory foam shadow dynamically */
-  background: radial-gradient(400px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), 
-              rgba(0, 0, 0, 0.04) 0%, 
-              rgba(0, 0, 0, 0) 100%);
-  transition: opacity 0.6s cubic-bezier(0.2, 0, 0, 1);
-  will-change: background;
-  opacity: var(--sponge-opacity, 0); 
-}
-
-.dark .interactive-sponge-layer {
-  /* In dark mode we use a stronger black shadow to simulate depth */
-  background: radial-gradient(400px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), 
-              rgba(0, 0, 0, 0.6) 0%, 
-              rgba(0, 0, 0, 0) 100%);
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  border-color: rgba(20, 184, 166, 0.4);
 }
 
 /* Animations */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+  100% { transform: translateY(0); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
-.animate-on-scroll {
+.animate-on-load {
+  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.animate-on-scroll.visible {
+/* Base class for javascript scroll reveal */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(10px);
+  transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.scroll-reveal.visible {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0);
 }
 
-/* Glass card styling - Calmer Linear Style */
-.glass-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px; /* Less rounded for maturity */
-  padding: 32px;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow: var(--shadow-card);
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+.delay-1 { animation-delay: 0.1s; transition-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; transition-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; transition-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; transition-delay: 0.4s; }
+
+/* Grids */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  width: 100%;
 }
 
-/* We removed the hover lift to make it feel more solid, 
-   or we just do a very subtle border/shadow shift */
-.glass-card:hover {
-  border-color: rgba(15, 118, 110, 0.2); /* Soft teal hint on hover */
-  box-shadow: var(--shadow-md);
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
 }
-.dark .glass-card:hover {
-  border-color: rgba(20, 184, 166, 0.3);
-}
-
-/* Utils */
-.flex { display: flex; }
-.flex-col { display: flex; flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.gap-2 { gap: 8px; }
-.gap-4 { gap: 16px; }
-.gap-6 { gap: 24px; }
-.gap-8 { gap: 32px; }
-.w-full { width: 100%; }
-.h-full { height: 100%; }
-.text-center { text-align: center; }

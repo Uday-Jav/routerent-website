@@ -1,68 +1,44 @@
-import React, { useState } from 'react';
-import { Download, Smartphone, CheckCircle } from 'lucide-react';
+import React from 'react';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function DownloadCTA() {
-  const [downloading, setDownloading] = useState(false);
-
-  // Hardcoded for user's decdsc7rn Cloudinary setup
-  const CLOUD_NAME = 'decdsc7rn';
-  const APK_PUBLIC_ID = 'sharent-latest-apk';
-
-  const handleDownload = async (e) => {
-    e.preventDefault();
-    setDownloading(true);
-    
-    // Construct Cloudinary secure URL for raw files (attachment forces download)
-    const cloudinaryUrl = `https://res.cloudinary.com/${CLOUD_NAME}/raw/upload/fl_attachment/${APK_PUBLIC_ID}.apk`;
-
-    try {
-      // Create an invisible anchor to trigger direct browser download
-      const a = document.createElement('a');
-      a.href = cloudinaryUrl;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (err) {
-      alert('APK currently unavailable or an error occurred downloading from Cloud.');
-    } finally {
-      setDownloading(false);
-    }
-  };
+  const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section className="section" id="download">
+    <section id="download" className="section" ref={ref} style={{ paddingBottom: '10rem' }}>
       <div className="container">
-        <div className="glass-card flex flex-col items-center justify-center text-center animate-on-scroll" style={{ padding: '80px 40px', background: 'var(--accent-primary)', color: 'white' }}>
+        
+        <div className={`glass scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
+          padding: '5rem 2rem',
+          textAlign: 'center',
+          background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.1) 0%, rgba(56, 189, 248, 0.05) 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
           
-          <h2 style={{ fontSize: '3rem', marginBottom: '24px', color: 'white' }}>Ready to Share the Ride?</h2>
-          <p style={{ fontSize: '1.2rem', marginBottom: '40px', maxWidth: '600px', opacity: 0.9 }}>
-            Join thousands of users reinventing travel and localized renting. Download the ShareRent app today.
-          </p>
+          {/* Abstract glows */}
+          <div style={{ position: 'absolute', top: '-50%', left: '-10%', width: '300px', height: '300px', background: 'rgba(20, 184, 166, 0.2)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: '-50%', right: '-10%', width: '300px', height: '300px', background: 'rgba(56, 189, 248, 0.2)', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            <button 
-              onClick={handleDownload} 
-              disabled={downloading}
-              className="btn" 
-              style={{ padding: '16px 32px', fontSize: '1.1rem', background: 'white', color: 'var(--accent-primary)', border: 'none', fontWeight: 600, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
-            >
-              {downloading ? 'Connecting...' : 'Direct APK Download'}
-              {!downloading && <Download size={20} style={{ marginLeft: '12px' }} />}
-            </button>
-            <button 
-              className="btn btn-secondary" 
-              style={{ padding: '16px 32px', fontSize: '1.1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.3)', color: 'white' }}
-            >
-              Play Store
-              <Smartphone size={20} style={{ marginLeft: '12px' }} />
-            </button>
+          <div style={{ position: 'relative', zIndex: 10 }}>
+            <h2 className="hero-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '1.5rem' }}>
+              Ready to <span className="gradient-text">Upgrade?</span>
+            </h2>
+            <p className="hero-subtitle" style={{ margin: '0 auto 3rem auto', maxWidth: '600px', fontSize: '1.2rem' }}>
+              Join the future of community renting and intelligent travel. Download Routerent today and experience the difference.
+            </p>
+            
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <a href="https://github.com/Uday-Jav/routerent-app/releases/download/v1/app-debug.apk" target="_blank" rel="noopener noreferrer" className="btn primary-btn" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '0.5rem' }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download APK
+              </a>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-8" style={{ marginTop: '40px', fontSize: '0.9rem', opacity: 0.8 }}>
-             <CheckCircle size={16} /> Verified Security 
-             <CheckCircle size={16} /> Regular Updates
-          </div>
         </div>
+
       </div>
     </section>
   );
