@@ -1,4 +1,9 @@
 {
+  "name": "routerent-website",
+  "version": "1.0.0",
+  "scripts": {
+    "vercel-build": "cd frontend && npm install && npm run build && cd .. && rm -rf dist && cp -r frontend/dist dist"
+  },
   "dependencies": {
     "lucide-react": "^1.7.0",
     "react-router-dom": "^7.13.2"
