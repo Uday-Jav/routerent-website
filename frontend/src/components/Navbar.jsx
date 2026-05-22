@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
@@ -20,7 +21,7 @@ export default function Navbar() {
       }}>
         
         {/* Left: Logo */}
-        <a href="/" style={{
+        <Link to="/" style={{
           display: 'flex',
           alignItems: 'center',
           gap: '0.75rem',
@@ -40,7 +41,7 @@ export default function Navbar() {
             }} 
           />
           Routerent
-        </a>
+        </Link>
 
         {/* Right: Glass Pill Container */}
         <div className="glass" style={{

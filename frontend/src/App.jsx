@@ -9,10 +9,10 @@ import RentalMap from './components/RentalMap';
 import RideSharing from './components/RideSharing';
 import TrustSecurity from './components/TrustSecurity';
 import Testimonials from './components/Testimonials';
-import Statistics from './components/Statistics';
 import DownloadCTA from './components/DownloadCTA';
 import Footer from './components/Footer';
 import Admin from './components/Admin';
+import LegalPage from './components/LegalPage';
 
 import './index.css';
 
@@ -42,7 +42,6 @@ const LandingPage = () => {
       <RideSharing />
       <TrustSecurity />
       <Testimonials />
-      <Statistics />
       <DownloadCTA />
       <Footer />
     </>
@@ -55,6 +54,8 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/privacy-policy" element={<LegalPage type="privacy" />} />
+        <Route path="/terms-of-service" element={<LegalPage type="terms" />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>

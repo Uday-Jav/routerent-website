@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
@@ -13,7 +14,7 @@ export default function Footer() {
         
         <div style={{ display: 'flex', flexDirection: 'column', md: { flexDirection: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: '2rem', marginBottom: '3rem' }}>
           
-          <a href="/" style={{
+          <Link to="/" style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
@@ -28,12 +29,12 @@ export default function Footer() {
               style={{ width: '32px', height: '32px', borderRadius: '8px' }} 
             />
             Routerent
-          </a>
+          </Link>
 
           <div style={{ display: 'flex', gap: '2rem' }}>
-            <a href="#features" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', transition: 'color 0.2s' }}>Features</a>
-            <a href="#security" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', transition: 'color 0.2s' }}>Security</a>
-            <a href="#download" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', transition: 'color 0.2s' }}>Download</a>
+            <a href="/#features" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', transition: 'color 0.2s' }}>Features</a>
+            <a href="/#security" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', transition: 'color 0.2s' }}>Security</a>
+            <a href="/#download" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', transition: 'color 0.2s' }}>Download</a>
           </div>
 
         </div>
@@ -43,8 +44,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Routerent. All rights reserved.
           </p>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Privacy Policy</a>
-            <a href="#" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Terms of Service</a>
+            <Link to="/privacy-policy" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Privacy Policy</Link>
+            <Link to="/terms-of-service" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Terms of Service</Link>
           </div>
         </div>
 
